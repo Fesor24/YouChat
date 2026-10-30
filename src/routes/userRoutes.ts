@@ -1,12 +1,15 @@
 import express from "express"
+import {db, connectAsync} from "../config/db"
 
 const router = express.Router()
 
-router.get("/user-profile", (req, res) =>{
-    res.json({
-        name: "Mike",
-        age: 10
-    })
+router.get("/user-profile", async (req, res) =>{
+
+    const user = await db.orm.public.User.all();
+
+    return res.json(user);
+
+    db.close();
 })
 
 export default router;
