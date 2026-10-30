@@ -32,7 +32,7 @@ process.on("unhandledRejection", async (err) =>{
 process.on("uncaughtException", async (err) =>{
     console.error("Uncaught Exception: ", err);
     server.close(async () => {
-        //await disconnectDB();
+        await disconnectAsync();
         process.exit(1);
     });
 });
@@ -40,7 +40,7 @@ process.on("uncaughtException", async (err) =>{
 process.on("unhandledRejection", async (err) =>{
     console.error("Unhandled Rejection: ", err);
     server.close(async () => {
-        //await disconnectDB();
+        await disconnectAsync();
         process.exit(1);
     });
 });
@@ -48,7 +48,7 @@ process.on("unhandledRejection", async (err) =>{
 process.on("unhandledRejection", async (err) =>{
     console.error("Unhandled Rejection: ", err);
     server.close(async () => {
-        //await disconnectDB();
+        await disconnectAsync();
         process.exit(1);
     });
 });
@@ -56,7 +56,7 @@ process.on("unhandledRejection", async (err) =>{
 process.on("SIGTERM", async (err) =>{
     console.error("SIGTERM received, shutting down gracefully");
     server.close(async () => {
-        //await disconnectDB();
+        await disconnectAsync();
         process.exit(1);
     });
 });

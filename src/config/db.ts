@@ -1,14 +1,9 @@
-// import { PrismaClient } from "@prisma/client/extension";
 import "dotenv/config"
 import postgres from "@prisma/orm-postgres/runtime";
 import { contractFromJson } from "@prisma/orm-postgres/static";
 import type { Contract } from "../../prisma/contract";
 import contractJson from "../../prisma/contract.json" with { type: "json" };
 import { Temporal } from "@js-temporal/polyfill";
-
-// if (!globalThis.Temporal) {
-//     Object.assign(globalThis, { Temporal });
-// }
 
 if (!("Temporal" in globalThis)) {
     Object.assign(globalThis, { Temporal });
@@ -38,24 +33,4 @@ export const connectAsync = async() =>{
 export const disconnectAsync = async () =>{
     await db.close();
 }
-
-// const prisma = new PrismaClient({
-//     log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"]
-// });
-
-// const connectDB = async() =>{
-//     try{
-//         await prisma.$connect();
-//         console.log("DB connected via prisma")
-//     }catch(err){
-//         console.error(`Database connection error. Message: ${err.message}`)
-//         process.exit(1)
-//     }
-// }
-
-// const disconnectDB = async () =>{
-//     await prisma.$disconnect();
-// }
-
-// export {prisma, connectDB, disconnectDB}
 
