@@ -1,6 +1,5 @@
 import express from "express"
 import {config} from 'dotenv'
-//import { connectDB, disconnectDB } from "./config/db.js";
 import {connectAsync, disconnectAsync} from "../src/config/db"
 
 // Import routes
