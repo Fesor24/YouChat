@@ -3,6 +3,7 @@ import {db} from "../config/db"
 import { ApiError, ApiResponse } from "../models/apiResponse";
 import UserModel from "../models/userModel";
 import { authenticateToken } from "../middlewares/authMiddleware";
+import StatusCodes from '../models/statusCodes';
 
 const router = express.Router()
 
@@ -12,7 +13,7 @@ router.get("/user-profile", authenticateToken, async (req: any, res:any) =>{
         const errrorResponse = new ApiResponse<string>()
             .failure(new ApiError('UNAUTHENTICATED', 'User is not authenticated'))
 
-        return res.status(404)
+        return res.status(StatusCodes.UNAUTHORIZED)
             .json(errrorResponse);
     }
 
@@ -24,7 +25,7 @@ router.get("/user-profile", authenticateToken, async (req: any, res:any) =>{
         const userErrorResponse = new ApiResponse<string>()
             .failure(new ApiError("USER_NOTFOUND", "User not found"));
 
-        return res.status(404)
+        return res.status(StatusCodes.NOT_FOUND)
             .json(userErrorResponse);
     }
 

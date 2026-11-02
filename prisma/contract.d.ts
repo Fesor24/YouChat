@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'2af384d0db2ff19d0c839ad0358b4a19a0e044d471cbc9bd7d91565a21655052'>;
+  StorageHashBase<'9832b0c68e4a1402f1a694f69fb2cea08e8151ddd88f667e27eb234660576ff3'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
@@ -307,6 +307,7 @@ export namespace Models {
     firstName: FieldOutputTypes['public']['User']['firstName'];
     id: FieldOutputTypes['public']['User']['id'];
     lastName: FieldOutputTypes['public']['User']['lastName'];
+    password: FieldOutputTypes['public']['User']['password'];
     readonly [RelationKeys]?: never;
   };
 }
@@ -372,6 +373,12 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly many: false;
                 };
+                readonly password: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
               };
               primaryKey: { readonly columns: readonly ['id'] };
               uniques: readonly [{ readonly columns: readonly ['email'] }];
@@ -420,6 +427,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly password: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
             };
             readonly relations: Record<string, never>;
             readonly storage: {
@@ -431,6 +442,7 @@ type ContractBase = Omit<
                 readonly firstName: { readonly column: 'firstName' };
                 readonly id: { readonly column: 'id' };
                 readonly lastName: { readonly column: 'lastName' };
+                readonly password: { readonly column: 'password' };
               };
             };
           };

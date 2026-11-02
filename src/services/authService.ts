@@ -1,4 +1,5 @@
 import { SignJWT } from 'jose';
+import bcrypt from 'bcryptjs';
 
 export const generateAccessToken = async (sub: string, email: string) => {
     const secret = process.env['JWT_SECRET'];
@@ -21,5 +22,22 @@ export const generateAccessToken = async (sub: string, email: string) => {
         .sign(jwtSecret)
 
         return token;
+
+}
+
+export const hashPassword = (password: string, salt: string | null = null): string =>  {
+
+    if(salt == null)
+        salt = bcrypt.genSaltSync(10);
+
+    const hash = bcrypt.hashSync(password, salt);
+
+    return `${hash}:${salt}`
+}
+
+export const comparePasswords = (userHashedInput: string, savedPasswordFromDb: string): 
+    boolean =>{
+
+    return userHashedInput == savedPasswordFromDb;
 
 }

@@ -1,3 +1,4 @@
 // After changes are made to schema
 npx prisma contract emit
 npx prisma migration plan --name add_user_phone
+npx prisma db migrate

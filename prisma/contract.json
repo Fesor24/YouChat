@@ -49,6 +49,13 @@
                   "codecId": "pg/text@1",
                   "kind": "scalar"
                 }
+              },
+              "password": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
               }
             },
             "relations": {},
@@ -68,6 +75,9 @@
                 },
                 "lastName": {
                   "column": "lastName"
+                },
+                "password": {
+                  "column": "password"
                 }
               },
               "namespaceId": "public",
@@ -117,6 +127,11 @@
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
+                },
+                "password": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
                 }
               },
               "foreignKeys": [],
@@ -140,7 +155,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "2af384d0db2ff19d0c839ad0358b4a19a0e044d471cbc9bd7d91565a21655052"
+    "storageHash": "9832b0c68e4a1402f1a694f69fb2cea08e8151ddd88f667e27eb234660576ff3"
   },
   "capabilities": {
     "postgres": {
