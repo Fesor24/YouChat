@@ -6,11 +6,19 @@ import {connectAsync, disconnectAsync} from "../src/config/db"
 import userRoutes from './routes/userRoutes'
 import authRoutes from './routes/authRoutes'
 
+import {initializeSockets} from './sockets/index'
+import { createServer } from "node:http"
+
 config();
 
 const app = express();
 
 const PORT = 5001
+
+//Create HTTP server
+const httpServer = createServer(app);
+
+const io = initializeSockets(httpServer);
 
 // Connect database
 connectAsync();
@@ -23,46 +31,56 @@ app.use(express.urlencoded({extended: true}));
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes);
 
-const server = app.listen(PORT, () => {
-    console.log(`Server running on port: ${PORT}....`)
-})
+// Graceful shutdown
+async function shutdown(){
+    console.log("Shutting down server...");
+
+    io.close(async () => {
+        httpServer.close(async () => {
+            await disconnectAsync();
+            process.exit(0);
+        })
+    })
+}
+
+async function startServer(){
+    try{
+        await connectAsync();
+
+        httpServer.listen(PORT, () => {
+            console.log(`Server running on port: ${PORT}`);
+        })
+    }
+    catch(error){
+        console.error('Unhandled Rejection:', error);
+        process.exit(1);
+    }
+}
+
 
 process.on("unhandledRejection", async (err) =>{
     console.error("Unhandled Rejection: ", err);
-    server.close(async () => {
-        await disconnectAsync();
-        process.exit(1);
-    });
+    shutdown();
 });
 
 process.on("uncaughtException", async (err) =>{
     console.error("Uncaught Exception: ", err);
-    server.close(async () => {
-        await disconnectAsync();
-        process.exit(1);
-    });
+    shutdown();
 });
 
 process.on("unhandledRejection", async (err) =>{
     console.error("Unhandled Rejection: ", err);
-    server.close(async () => {
-        await disconnectAsync();
-        process.exit(1);
-    });
+    shutdown();
 });
 
 process.on("unhandledRejection", async (err) =>{
     console.error("Unhandled Rejection: ", err);
-    server.close(async () => {
-        await disconnectAsync();
-        process.exit(1);
-    });
+    shutdown();
 });
 
-process.on("SIGTERM", async (err) =>{
-    console.error("SIGTERM received, shutting down gracefully");
-    server.close(async () => {
-        await disconnectAsync();
-        process.exit(1);
-    });
-});
+process.on("SIGTERM", shutdown);
+process.on('SIGINT', shutdown);
+
+startServer();
+
+export {app, io}

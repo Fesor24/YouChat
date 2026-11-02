@@ -1,7 +1,7 @@
 import express from 'express'
 import {db} from '../config/db'
 import { ApiError, ApiResponse } from '../models/apiResponse';
-import {comparePasswords, generateAccessToken, hashPassword} from '../services/authService'
+import {comparePasswords, generateAccessToken, hashPassword} from '../services/auth.service'
 import StatusCodes from '../models/statusCodes';
 
 const router = express.Router();
