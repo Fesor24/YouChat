@@ -1,19 +1,31 @@
 import express from "express"
-import {db, connectAsync} from "../config/db"
-import { ApiResponse } from "../models/apiResponse";
+import {db} from "../config/db"
+import { ApiError, ApiResponse } from "../models/apiResponse";
 import UserModel from "../models/userModel";
+import { authenticateToken } from "../middlewares/authMiddleware";
 
 const router = express.Router()
 
-router.get("/user-profile", async (req, res) =>{
+router.get("/user-profile", authenticateToken, async (req: any, res:any) =>{
+
+    if(!req.user){
+        const errrorResponse = new ApiResponse<string>()
+            .failure(new ApiError('UNAUTHENTICATED', 'User is not authenticated'))
+
+        return res.status(404)
+            .json(errrorResponse);
+    }
 
     const user = await db.orm.public.User
-        .where({id: 1})
+        .where({email: req.user['email']})
         .first();
 
     if(!user){
-        // TODO: Handle situation
-        throw Error("User not found");
+        const userErrorResponse = new ApiResponse<string>()
+            .failure(new ApiError("USER_NOTFOUND", "User not found"));
+
+        return res.status(404)
+            .json(userErrorResponse);
     }
 
     let userModel = new UserModel();
