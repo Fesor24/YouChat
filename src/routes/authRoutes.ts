@@ -3,11 +3,24 @@ import {db} from '../config/db'
 import { ApiError, ApiResponse } from '../models/apiResponse';
 import {comparePasswords, generateAccessToken, hashPassword} from '../services/auth.service'
 import StatusCodes from '../models/statusCodes';
+import { validators } from '../utils/model-validation';
 
 const router = express.Router();
 
 router.post('/login', async (req: any, res:any) => {
     const body = req.body;
+
+    const validation = validators.login.safeParse(body);
+
+     if (!validation.success) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            errors: validation.error.issues.map(issue => ({
+                field: issue.path[0],
+                message: issue.message
+            }))
+        });
+    }
 
     const userEmail = body['email'];
     const password = body['password']
@@ -17,7 +30,7 @@ router.post('/login', async (req: any, res:any) => {
     });
 
     if (user == null)
-        return res.status(404)
+        return res.status(StatusCodes.UNAUTHORIZED)
             .json(new ApiResponse<string>()
             .failure(new ApiError("INVALID_CREDENTIALS", "Incorrect login credentials")))
 
@@ -40,6 +53,18 @@ router.post('/login', async (req: any, res:any) => {
 
 router.post('/register', async (req: any, res:any) => {
     const body = req.body;
+
+    const validation = validators.register.safeParse(body);
+
+     if (!validation.success) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            errors: validation.error.issues.map(issue => ({
+                field: issue.path[0],
+                message: issue.message
+            }))
+        });
+    }
 
     const userEmail = body['email'];
     const firstName = body['firstName'];
